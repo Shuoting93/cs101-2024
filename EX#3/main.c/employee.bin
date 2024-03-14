@@ -1,0 +1,77 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+// Define employee structure
+typedef struct employee {
+    int id;
+    char name[50];
+    int age;
+    float salary;
+} employee_t;
+
+// Write employee data to binary file
+void emp_writefile(employee_t emp[], int n) {
+    FILE *file = fopen("employee.bin", "wb");
+    if (file == NULL) {
+        printf("Error opening file!\n");
+        exit(1);
+    }
+
+    fwrite(emp, sizeof(employee_t), n, file);
+
+    fclose(file);
+}
+
+// Read employee data from binary file
+void emp_readfile(employee_t emp[], int n) {
+    FILE *file = fopen("employee.bin", "rb");
+    if (file == NULL) {
+        printf("Error opening file!\n");
+        exit(1);
+    }
+
+    fread(emp, sizeof(employee_t), n, file);
+
+    fclose(file);
+}
+
+// Print employee information to stdout
+void emp_info(employee_t emp) {
+    printf("ID: %d, Name: %s, Age: %d, Salary: %.2f\n", emp.id, emp.name, emp.age, emp.salary);
+}
+
+int main() {
+    // Define employee array
+    employee_t emp[3];
+
+    // Populate employee data
+    emp[0].id = 1;
+    emp[0].age = 20;
+    emp[0].salary = 30000.0;
+    strcpy(emp[0].name, "IU");
+
+    emp[1].id = 2;
+    emp[1].age = 26;
+    emp[1].salary = 36000.0;
+    strcpy(emp[1].name, "Taylor");
+
+    emp[2].id = 3;
+    emp[2].age = 31;
+    emp[2].salary = 90000.0;
+    strcpy(emp[2].name, "Swift");
+
+    // Write employee data to binary file
+    emp_writefile(emp, 3);
+
+    // Read employee data from binary file
+    employee_t read_emp[3];
+    emp_readfile(read_emp, 3);
+
+    // Print employee data
+    for (int i = 0; i < 3; i++) {
+        emp_info(read_emp[i]);
+    }
+
+    return 0;
+}
